@@ -24,7 +24,7 @@ public class BibliotecaAppTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
-    private String stringfiedBookList = "1 - Harry Potter and the Phylosopher Stone\n2 - Harry Potter and Askaban prisioner\n";
+    private String stringfiedBookList = "1 - Harry Potter and the Phylosopher Stone\tJK Rowling\t1997\n2 - Harry Potter and Askaban prisioner\tJK Rowling\t1999\n";
     private List<Book> bookList;
     private String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
     private String output = welcomeMessage + stringfiedBookList;
@@ -56,8 +56,8 @@ public class BibliotecaAppTest {
     private List<Book> setBookListUp() {
         List<Book> bookList = new ArrayList<Book>();
 
-        bookList.add(new Book("Harry Potter and the Phylosopher Stone"));
-        bookList.add(new Book("Harry Potter and Askaban prisioner"));
+        bookList.add(new Book("Harry Potter and the Phylosopher Stone", "JK Rowling", 1997));
+        bookList.add(new Book("Harry Potter and Askaban prisioner", "JK Rowling", 1999));
         return bookList;
     }
     
@@ -70,4 +70,5 @@ public class BibliotecaAppTest {
         app.run();
         assertEquals(output , outContent.toString());
     }
+
 }

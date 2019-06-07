@@ -10,8 +10,8 @@ public class BookRepository {
 
     public List<Book> getBookList() {
         List<Book> list = new ArrayList<Book>();
-        list.add(new Book("Harry Potter"));
-        list.add(new Book("Alice in Wonderland"));
+        list.add(new Book("Harry Potter", "JK Rowling", 1997));
+        list.add(new Book("Alice in Wonderland", "Lewis Carroll", 1865));
         return list;
     }
 }
