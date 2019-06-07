@@ -18,8 +18,13 @@ public class BibliotecaApp {
     private void printBookList(List<Book> list) {
         int i = 1;
         ListIterator<Book> bookIterator = list.listIterator();
+        Book aux;
         while(bookIterator.hasNext()) {
-            System.out.print(i + " - " + bookIterator.next().getBookTitle() + "\n");
+            aux = bookIterator.next();
+            System.out.print(i + " - " + aux.getBookTitle() + "\t" +
+                    aux.getAuthorName() + "\t" +
+                    aux.getBookYear() +
+                    "\n");
             i++;
         }
     }
