@@ -2,18 +2,16 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.models.Book;
 import com.twu.biblioteca.services.BookService;
+import com.twu.biblioteca.services.MenuService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import org.mockito.Mock;
 
 import static org.mockito.Mockito.*;
 
@@ -24,18 +22,36 @@ public class BibliotecaAppTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
-    private String stringfiedBookList = "1 - Harry Potter and the Phylosopher Stone\tJK Rowling\t1997\n2 - Harry Potter and Askaban prisioner\tJK Rowling\t1999\n";
-    private List<Book> bookList;
     private String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
-    private String output = welcomeMessage + stringfiedBookList;
-    private BookService service;
+    private String menuStringfied = "How can we help you?\n" +
+            "1 - List of books.\n";
+    private String strinfiedBookList = "1 - Harry Potter\tJK Rowling\t1997\n" +
+            "2 - Alice in Wonderland\tLewis Carroll\t1865\n";
+
+    private String output = welcomeMessage;
+    private BookService bookService;
+    private MenuService menuService;
+
+    private String functionalOutput = welcomeMessage + menuStringfied;
+    private String functionalOutputWithBookList = welcomeMessage + menuStringfied + strinfiedBookList;
 
     @Before
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-        this.service = mock(BookService.class);
-        bookList = this.setBookListUp();
+    }
+
+    @Before
+    public void setUpBookServiceMock() {
+        this.bookService = mock(BookService.class);
+        when(this.bookService.getBookList()).thenReturn(new ArrayList<Book>());
+    }
+
+    @Before
+    public void setUpMenuServiceMock() {
+        this.menuService = mock(MenuService.class);
+        doNothing().when(this.menuService).displayMenu();
+        when(this.menuService.getUserOption()).thenReturn(1);
     }
 
     @After
@@ -46,29 +62,42 @@ public class BibliotecaAppTest {
 
     @Test
     public void testIfWelcomeMessageAppears() {
-        BibliotecaApp app = new BibliotecaApp();
-        when(this.service.getBookList()).thenReturn(bookList);
-        app.setBookServiceDependency(this.service);
+        BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
+
         app.run();
         assertEquals(output, outContent.toString());
     }
 
-    private List<Book> setBookListUp() {
-        List<Book> bookList = new ArrayList<Book>();
 
-        bookList.add(new Book("Harry Potter and the Phylosopher Stone", "JK Rowling", 1997));
-        bookList.add(new Book("Harry Potter and Askaban prisioner", "JK Rowling", 1999));
-        return bookList;
-    }
-    
     @Test
-    public void testIfBookServiceIsCalled() {
-        BibliotecaApp app = new BibliotecaApp();
-
-        when(this.service.getBookList()).thenReturn(bookList);
-        app.setBookServiceDependency(this.service);
+    public void testIfMenuIsCalled() {
+        BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
         app.run();
-        assertEquals(output , outContent.toString());
+        verify(this.menuService, times(1)).displayMenu();
+    }
+
+    @Test
+    public void testIfMenuIsDisplayed() {
+        BibliotecaApp app = new BibliotecaApp();
+        app.run();
+        assertEquals(functionalOutput, outContent.toString());
+    }
+
+    @Test
+    public void testIfUserInputIsInserted() {
+        BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
+        app.run();
+        verify(this.menuService, times(1)).getUserOption();
+    }
+
+    @Test
+    public void testIfBookListIsDisplayedIfOptionIs1() {
+        this.menuService = mock(MenuService.class);
+        doCallRealMethod().when(this.menuService).displayMenu();
+        when(this.menuService.getUserOption()).thenReturn(1);
+        BibliotecaApp app = new BibliotecaApp(new BookService(), this.menuService);
+        app.run();
+        assertEquals(functionalOutputWithBookList, outContent.toString());
     }
 
 }
