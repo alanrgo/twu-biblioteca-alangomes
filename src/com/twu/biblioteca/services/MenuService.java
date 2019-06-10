@@ -24,7 +24,7 @@ public class MenuService {
         if ( option > 0 && option <= numberOptions ) {
             return true;
         }
-        System.out.print("This is not a valid option.\n");
+        System.out.print("Please select a valid option!\n");
         return false;
     }
 
