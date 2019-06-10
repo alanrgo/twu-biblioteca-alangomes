@@ -1,12 +1,14 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.models.Book;
+import com.twu.biblioteca.models.MenuOption;
 import com.twu.biblioteca.services.BookService;
 import com.twu.biblioteca.services.MenuService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -23,19 +25,20 @@ public class BibliotecaAppTest {
     private final PrintStream originalErr = System.err;
 
     private String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
-    private String optionScopeTitle = "\nBooks in the library\n";
-    private String menuStringfied = "How can we help you?\n" +
-            "1 - List of books.\n";
+    private String bookScopeTitle = "\nBooks in the library\n";
+    private String quitMessage = "Quitting the application. Hope to see you soon! ;D\n";
+    private String menuStringfied = "\nHow can we help you?\n" +
+            "1 - List of books.\n" +
+            "2 - Quit Application.\n";
     private String strinfiedBookList = "1 - Harry Potter\tJK Rowling\t1997\n" +
             "2 - Alice in Wonderland\tLewis Carroll\t1865\n";
 
 
-    private String output = welcomeMessage;
+    private String output = welcomeMessage + quitMessage;
     private BookService bookService;
     private MenuService menuService;
 
-    private String functionalOutput = welcomeMessage + menuStringfied;
-    private String functionalOutputWithBookList = welcomeMessage + menuStringfied + optionScopeTitle + strinfiedBookList;
+    private String functionalOutput = welcomeMessage + menuStringfied + quitMessage;
 
     @Before
     public void setUpStreams() {
@@ -53,7 +56,9 @@ public class BibliotecaAppTest {
     public void setUpMenuServiceMock() {
         this.menuService = mock(MenuService.class);
         doNothing().when(this.menuService).displayMenu();
-        when(this.menuService.getUserOption()).thenReturn(1);
+        when(this.menuService.getUserOption())
+                .thenReturn(MenuOption.LIST_BOOKS)
+                .thenReturn(MenuOption.QUIT);
     }
 
     @After
@@ -75,13 +80,14 @@ public class BibliotecaAppTest {
     public void testIfMenuIsCalled() {
         BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
         app.run();
-        verify(this.menuService, times(1)).displayMenu();
+        verify(this.menuService, times(2)).displayMenu();
     }
 
     @Test
     public void testIfMenuIsDisplayed() {
         doCallRealMethod().when(this.menuService).displayMenu();
-        when(this.menuService.getUserOption()).thenReturn(0);
+        when(this.menuService.getUserOption())
+                .thenReturn(MenuOption.QUIT);
         BibliotecaApp app = new BibliotecaApp(new BookService(), this.menuService);
         app.run();
         assertEquals(functionalOutput, outContent.toString());
@@ -91,17 +97,51 @@ public class BibliotecaAppTest {
     public void testIfUserInputIsInserted() {
         BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
         app.run();
-        verify(this.menuService, times(1)).getUserOption();
+        verify(this.menuService, times(2)).getUserOption();
     }
 
     @Test
     public void testIfBookListIsDisplayedIfOptionIs1() {
         this.menuService = mock(MenuService.class);
         doCallRealMethod().when(this.menuService).displayMenu();
-        when(this.menuService.getUserOption()).thenReturn(1);
+        when(this.menuService.getUserOption())
+                .thenReturn(MenuOption.LIST_BOOKS)
+                .thenReturn(MenuOption.QUIT);
         BibliotecaApp app = new BibliotecaApp(new BookService(), this.menuService);
         app.run();
-        assertEquals(functionalOutputWithBookList, outContent.toString());
+        assertEquals(
+                welcomeMessage
+                        + menuStringfied + bookScopeTitle + strinfiedBookList
+                        + menuStringfied + quitMessage
+                , outContent.toString());
+    }
+
+    @Test
+    public void testIfTheApplicationIsFinishing() {
+        this.menuService = mock(MenuService.class);
+        doCallRealMethod().when(this.menuService).displayMenu();
+        when(this.menuService.getUserOption()).thenReturn(MenuOption.QUIT);
+        BibliotecaApp app = new BibliotecaApp(new BookService(), this.menuService);
+        app.run();
+        assertEquals(functionalOutput, outContent.toString());
+    }
+
+    @Test
+    public void testIfProgramOnlyFinishesAfterQuitOption() {
+        this.menuService = mock(MenuService.class);
+        doCallRealMethod().when(this.menuService).displayMenu();
+        when(this.menuService.getUserOption())
+                .thenReturn(MenuOption.LIST_BOOKS)
+                .thenReturn(MenuOption.LIST_BOOKS)
+                .thenReturn(MenuOption.QUIT);
+
+        BibliotecaApp app = new BibliotecaApp(new BookService(), this.menuService);
+        app.run();
+
+        assertEquals(welcomeMessage
+                + menuStringfied + bookScopeTitle + strinfiedBookList
+                + menuStringfied + bookScopeTitle + strinfiedBookList
+                + menuStringfied + quitMessage, outContent.toString());
     }
 
 }

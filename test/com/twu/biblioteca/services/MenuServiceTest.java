@@ -1,5 +1,6 @@
 package com.twu.biblioteca.services;
 
+import com.twu.biblioteca.models.MenuOption;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ public class MenuServiceTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
-    private String stringfiedMenu = "How can we help you?\n1 - List of books.\n";
+    private String stringfiedMenu = "\nHow can we help you?\n1 - List of books.\n2 - Quit Application.\n";
     private String errorMessage = "Please select a valid option!\n";
 
 
@@ -46,14 +47,14 @@ public class MenuServiceTest {
         String listBookInput = "1\n";
         Scanner scanner = new Scanner(listBookInput);
         MenuService menuService = new MenuService(scanner);
-        int option = menuService.getUserOption();
+        MenuOption option = menuService.getUserOption();
 
-        assertEquals(1, option);
+        assertEquals(MenuOption.LIST_BOOKS, option);
     }
 
     @Test
     public void testErrorMessageForInvalidOption() {
-        String listBookInput = "50\n1\n";
+        String listBookInput = "50\n2\n";
         Scanner scanner = new Scanner(listBookInput);
         MenuService menuService = new MenuService(scanner);
 
@@ -67,7 +68,9 @@ public class MenuServiceTest {
         Scanner scanner = new Scanner(listBookInput);
         MenuService menuService = new MenuService(scanner);
 
-        int option = menuService.getUserOption();
-        assertEquals(1, option);
+        MenuOption option = menuService.getUserOption();
+        assertEquals(MenuOption.LIST_BOOKS, option);
     }
+
+
 }
