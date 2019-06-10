@@ -1,4 +1,4 @@
-package com.twu.biblioteca.unit.models;
+package com.twu.biblioteca.models;
 
 import org.junit.Test;
 
