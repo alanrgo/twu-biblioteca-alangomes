@@ -1,19 +1,18 @@
-package com.twu.biblioteca;
+package com.twu.biblioteca.unit;
 
-import com.twu.biblioteca.models.Book;
-import com.twu.biblioteca.services.BookService;
+import com.twu.biblioteca.BibliotecaApp;
+import com.twu.biblioteca.unit.models.Book;
+import com.twu.biblioteca.unit.services.BookService;
+import com.twu.biblioteca.unit.services.MenuService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import org.mockito.Mock;
 
 import static org.mockito.Mockito.*;
 
@@ -24,18 +23,27 @@ public class BibliotecaAppTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
-    private String stringfiedBookList = "1 - Harry Potter and the Phylosopher Stone\tJK Rowling\t1997\n2 - Harry Potter and Askaban prisioner\tJK Rowling\t1999\n";
-    private List<Book> bookList;
     private String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
-    private String output = welcomeMessage + stringfiedBookList;
-    private BookService service;
+    private String output = welcomeMessage;
+    private BookService bookService;
+    private MenuService menuService;
 
     @Before
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-        this.service = mock(BookService.class);
-        bookList = this.setBookListUp();
+    }
+
+    @Before
+    public void setUpBookServiceMock() {
+        this.bookService = mock(BookService.class);
+        when(this.bookService.getBookList()).thenReturn(new ArrayList<Book>());
+    }
+
+    @Before
+    public void setUpMenuServiceMock() {
+        this.menuService = mock(MenuService.class);
+        doNothing().when(this.menuService).displayMenu();
     }
 
     @After
@@ -46,29 +54,27 @@ public class BibliotecaAppTest {
 
     @Test
     public void testIfWelcomeMessageAppears() {
-        BibliotecaApp app = new BibliotecaApp();
-        when(this.service.getBookList()).thenReturn(bookList);
-        app.setBookServiceDependency(this.service);
+        BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
+
         app.run();
         assertEquals(output, outContent.toString());
     }
 
-    private List<Book> setBookListUp() {
-        List<Book> bookList = new ArrayList<Book>();
-
-        bookList.add(new Book("Harry Potter and the Phylosopher Stone", "JK Rowling", 1997));
-        bookList.add(new Book("Harry Potter and Askaban prisioner", "JK Rowling", 1999));
-        return bookList;
-    }
     
     @Test
     public void testIfBookServiceIsCalled() {
-        BibliotecaApp app = new BibliotecaApp();
 
-        when(this.service.getBookList()).thenReturn(bookList);
-        app.setBookServiceDependency(this.service);
+        BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
         app.run();
-        assertEquals(output , outContent.toString());
+        verify(this.bookService, times(1)).getBookList();
     }
+
+    @Test
+    public void testIfMenuIsCalled() {
+        BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
+        app.run();
+        verify(this.menuService, times(1)).displayMenu();
+    }
+
 
 }

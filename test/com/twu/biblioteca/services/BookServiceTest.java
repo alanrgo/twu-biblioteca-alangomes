@@ -1,7 +1,7 @@
-package com.twu.biblioteca.services;
+package com.twu.biblioteca.unit.services;
 
-import com.twu.biblioteca.models.Book;
-import com.twu.biblioteca.repositories.BookRepository;
+import com.twu.biblioteca.unit.models.Book;
+import com.twu.biblioteca.unit.repositories.BookRepository;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -13,21 +13,33 @@ import static org.mockito.Mockito.when;
 
 public class BookServiceTest {
 
+    private BookService service;
+    private BookRepository repository;
+
+    private List<Book> buildBookList() {
+        Book harryPotterBook = new Book("Harry Potter", "JK Rowling", 1997);
+        Book aliceInWonderlandBook = new Book("Alice in Wonderland", "Lewis Carroll", 1865);
+        List<Book> list = new ArrayList<Book>();
+        list.add(harryPotterBook);
+        list.add(aliceInWonderlandBook);
+        return list;
+    }
+
     @Test
     public void testIfSetUpInstantiateBookRepositoryThroughInjection() {
-        BookService service = new BookService();
 
         BookRepository repository = mock(BookRepository.class);
-        List<Book> list= new ArrayList<Book>();
-        String harryPotterTitle = "Harry Potter";
-
-        list.add(new Book(harryPotterTitle));
-
+        List<Book> list = buildBookList();
         when(repository.getBookList()).thenReturn(list);
 
-        service.setBookRepositoryDependency(repository);
-        assertEquals(service.getBookList().get(0).getBookTitle(), harryPotterTitle);
+        BookService service = new BookService(repository);
 
+        assertEquals(service.getBookList().get(0).getBookTitle(), list.get(0).getBookTitle());
+
+    }
+
+    @Test
+    public void testIfTheServiceIsPrintingBookListCorrectly() {
 
     }
 }
