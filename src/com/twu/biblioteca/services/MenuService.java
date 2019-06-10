@@ -1,11 +1,13 @@
 package com.twu.biblioteca.services;
 
+import com.twu.biblioteca.models.MenuOption;
+
 import java.util.Scanner;
 
 public class MenuService {
 
     private Scanner inputObj;
-    private int numberOptions = 1;
+    private int numberOptions = 2;
 
     public MenuService() {
         this.inputObj = new Scanner(System.in);
@@ -16,8 +18,9 @@ public class MenuService {
     }
 
     public void displayMenu(){
-        System.out.print("How can we help you?\n");
+        System.out.print("\nHow can we help you?\n");
         System.out.print("1 - List of books.\n");
+        System.out.print("2 - Quit Application.\n");
     }
 
     private boolean isValid(int option) {
@@ -28,11 +31,11 @@ public class MenuService {
         return false;
     }
 
-    public int getUserOption() {
+    public MenuOption getUserOption() {
         int option;
         do {
             option = inputObj.nextInt();
         } while ( !isValid(option));
-        return option;
+        return MenuOption.values()[option];
     }
 }
