@@ -23,17 +23,19 @@ public class BibliotecaAppTest {
     private final PrintStream originalErr = System.err;
 
     private String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
+    private String optionScopeTitle = "\nBooks in the library\n";
     private String menuStringfied = "How can we help you?\n" +
             "1 - List of books.\n";
     private String strinfiedBookList = "1 - Harry Potter\tJK Rowling\t1997\n" +
             "2 - Alice in Wonderland\tLewis Carroll\t1865\n";
+
 
     private String output = welcomeMessage;
     private BookService bookService;
     private MenuService menuService;
 
     private String functionalOutput = welcomeMessage + menuStringfied;
-    private String functionalOutputWithBookList = welcomeMessage + menuStringfied + strinfiedBookList;
+    private String functionalOutputWithBookList = welcomeMessage + menuStringfied + optionScopeTitle + strinfiedBookList;
 
     @Before
     public void setUpStreams() {
@@ -78,7 +80,9 @@ public class BibliotecaAppTest {
 
     @Test
     public void testIfMenuIsDisplayed() {
-        BibliotecaApp app = new BibliotecaApp();
+        doCallRealMethod().when(this.menuService).displayMenu();
+        when(this.menuService.getUserOption()).thenReturn(0);
+        BibliotecaApp app = new BibliotecaApp(new BookService(), this.menuService);
         app.run();
         assertEquals(functionalOutput, outContent.toString());
     }

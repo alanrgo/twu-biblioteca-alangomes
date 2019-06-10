@@ -18,7 +18,7 @@ public class MenuServiceTest {
     private final PrintStream originalErr = System.err;
 
     private String stringfiedMenu = "How can we help you?\n1 - List of books.\n";
-    private String errorMessage = "This is not a valid option.\n";
+    private String errorMessage = "Please select a valid option!\n";
 
 
     @Before
