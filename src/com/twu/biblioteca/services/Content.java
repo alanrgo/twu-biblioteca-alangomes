@@ -6,7 +6,8 @@ public class Content {
     public static final String STRINGIFIED_MENU = "\nHow can we help you?\n" +
             "1 - List of books.\n" +
             "2 - Checkout Book\n" +
-            "3 - Quit Application.\n";
+            "3 - Return Book\n" +
+            "4 - Quit Application.\n";
     public static final String QUIT_MESSAGE = "Quitting the application. Hope to see you soon! ;D\n";
     public static final String BOOK_SCOPE =  "\nBooks in the library\n";
     public static final String CHECKOUT_SCOPE = "\nCheckout book\n";

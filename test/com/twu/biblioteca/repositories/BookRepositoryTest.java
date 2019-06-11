@@ -1,5 +1,6 @@
 package com.twu.biblioteca.repositories;
 import com.twu.biblioteca.fixtures.BookFixtures;
+import com.twu.biblioteca.models.Book;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -34,5 +35,15 @@ public class BookRepositoryTest {
         int bookIndex = 0;
         repository.removeBookFromList(bookIndex);
         assertEquals(expectedFinalSize, repository.getBookList().size());
+    }
+
+    @Test
+    public void testIfCheckedOutBookReachesOtherList() {
+        BookRepository repository = new BookRepository();
+        int expectedCheckoutListSize = 1;
+        int bookIndex = 0;
+        Book checkedOut = repository.removeBookFromList(bookIndex);
+        repository.insertBookIntoCheckoutList(checkedOut);
+        assertEquals(expectedCheckoutListSize, repository.getAllCheckoutBooks().size());
     }
 }

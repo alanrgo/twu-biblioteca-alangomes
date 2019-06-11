@@ -41,9 +41,14 @@ public class BookService {
 
     public boolean checkBookOut(int menuBookIndex) {
         if( menuBookIndex > 0 && menuBookIndex <= getBookList().size()) {
-            repository.removeBookFromList(menuBookIndex - 1);
+            Book checkedOut = repository.removeBookFromList(menuBookIndex - 1);
+            repository.insertBookIntoCheckoutList(checkedOut);
             return true;
         }
         return false;
+    }
+
+    public void returnBook() {
+        
     }
 }

@@ -1,5 +1,6 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.fixtures.BookFixtures;
 import com.twu.biblioteca.models.Book;
 import com.twu.biblioteca.models.MenuOption;
 import com.twu.biblioteca.services.BookService;
@@ -217,6 +218,51 @@ public class BibliotecaAppTest {
         assertEquals( welcomeMessage +
                 menuStringified + checkoutScope + checkoutOptionMessage + checkoutFailureMessage +
                 menuStringified + quitMessage, outContent.toString());
+    }
+
+    @Test
+    public void testIfReturnBookMethodIsCalled() {
+        int bookIndex = 2;
+        int checkoutBookIndex = 1;
+        bookService = mock(BookService.class);
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.RETURN)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex())
+                .thenReturn(bookIndex)
+                .thenReturn(checkoutBookIndex);
+
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
+        app.run();
+        verify(bookService, times(1)).returnBook();
+    }
+
+    @Test
+    public void testIfBookIsReturned() {
+        int bookIndex = 2;
+        int checkoutBookIndex = 1;
+        bookService = new BookService();
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.RETURN)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex())
+                .thenReturn(bookIndex)
+                .thenReturn(checkoutBookIndex);
+
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
+        app.run();
+
+        assertEquals(bookService.getBookList().get(0), BookFixtures.HARRY_POTTER);
+        assertEquals(bookService.getBookList().get(1), BookFixtures.ALICE_WONDERLAND);
+
     }
 
 }
