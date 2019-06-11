@@ -12,4 +12,5 @@ public class Content {
     public static final String CHECKOUT_SCOPE = "\nCheckout book\n";
     public static final String CHECKOUT_INPUT_MESSAGE = "Type the book index: ";
     public static final String CHECKOUT_SUCCESS = "\nThank you! Enjoy the book\n";
+    public static final String CHECKOUT_FAILURE = "\nSorry, this book is not available\n";
 }

@@ -41,6 +41,7 @@ public class BibliotecaAppTest {
     private String checkoutScope = Content.CHECKOUT_SCOPE;
     private String checkoutOptionMessage = Content.CHECKOUT_INPUT_MESSAGE;
     private String checkoutSuccessMessage = Content.CHECKOUT_SUCCESS;
+    private String checkoutFailureMessage = Content.CHECKOUT_FAILURE;
 
     @Before
     public void setUpStreams() {
@@ -149,13 +150,15 @@ public class BibliotecaAppTest {
     @Test
     public void testIfCheckoutIsBeingOutputted() {
         this.menuService = mock(MenuService.class);
-        doCallRealMethod().when(this.menuService).displayMenu();
-        when(this.menuService.getUserOption())
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        doCallRealMethod().when(menuService).displayCheckoutSuccessMessage();
+        when(menuService.getUserOption())
                 .thenReturn(MenuOption.CHECKOUT)
                 .thenReturn(MenuOption.QUIT);
-        when(this.menuService.getBookIndex()).thenReturn(1);
+        when(menuService.getBookIndex()).thenReturn(1);
 
-        BibliotecaApp app = new BibliotecaApp(new BookService(), this.menuService);
+        BibliotecaApp app = new BibliotecaApp(new BookService(), menuService);
         app.run();
 
         assertEquals( welcomeMessage +
@@ -165,16 +168,16 @@ public class BibliotecaAppTest {
 
     @Test
     public void testIfCheckoutServiceIsCalled() {
-        this.bookService = mock(BookService.class);
+        bookService = mock(BookService.class);
 
-        this.menuService = mock(MenuService.class);
-        doCallRealMethod().when(this.menuService).displayMenu();
-        when(this.menuService.getUserOption())
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        when(menuService.getUserOption())
                 .thenReturn(MenuOption.CHECKOUT)
                 .thenReturn(MenuOption.QUIT);
-        when(this.menuService.getBookIndex()).thenReturn(1);
+        when(menuService.getBookIndex()).thenReturn(1);
 
-        BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
         app.run();
 
         verify(menuService, times(1)).getBookIndex();
@@ -195,6 +198,25 @@ public class BibliotecaAppTest {
         app.run();
 
         assertEquals(this.bookService.getBookList().size(), 1);
+    }
+
+    @Test
+    public void testIfFailedCheckoutIsBeingOutputted() {
+        int invalidBookIndex = 50;
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex()).thenReturn(invalidBookIndex);
+
+        BibliotecaApp app = new BibliotecaApp(new BookService(), menuService);
+        app.run();
+
+        assertEquals( welcomeMessage +
+                menuStringified + checkoutScope + checkoutOptionMessage + checkoutFailureMessage +
+                menuStringified + quitMessage, outContent.toString());
     }
 
 }

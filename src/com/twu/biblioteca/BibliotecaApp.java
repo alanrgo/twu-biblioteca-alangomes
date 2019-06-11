@@ -27,17 +27,18 @@ public class BibliotecaApp {
 
         MenuOption option;
         do {
-            this.menuService.displayMenu();
-            option = this.menuService.getUserOption();
+            menuService.displayMenu();
+            option = menuService.getUserOption();
             if( option == MenuOption.LIST_BOOKS ) {
-                this.bookService.printBookList(this.bookService.getBookList());
+                bookService.printBookList(bookService.getBookList());
             }
             if( option == MenuOption.CHECKOUT ) {
-                System.out.print(Content.CHECKOUT_SCOPE);
-                System.out.print(Content.CHECKOUT_INPUT_MESSAGE);
-                int bookIndex = this.menuService.getBookIndex();
-                this.bookService.checkBookOut(bookIndex);
-                System.out.print(Content.CHECKOUT_SUCCESS);
+                menuService.displayCheckoutInterface();
+                int bookIndex = menuService.getBookIndex();
+                if (bookService.checkBookOut(bookIndex) )
+                    menuService.displayCheckoutSuccessMessage();
+                else
+                    System.out.print(Content.CHECKOUT_FAILURE);
             }
         } while ( option != MenuOption.QUIT);
 
