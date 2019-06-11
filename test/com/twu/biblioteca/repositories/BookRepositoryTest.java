@@ -25,6 +25,14 @@ public class BookRepositoryTest {
         BookRepository repository = new BookRepository();
         assertEquals(repository.getBookList().get(0), BookFixtures.HARRY_POTTER);
         assertEquals(repository.getBookList().get(1), BookFixtures.ALICE_WONDERLAND);
+    }
 
+    @Test
+    public void testIfBookIsBeingRemovedFromList() {
+        BookRepository repository = new BookRepository();
+        int expectedFinalSize = repository.getBookList().size() - 1;
+        int bookIndex = 0;
+        repository.removeBookFromList(bookIndex);
+        assertEquals(expectedFinalSize, repository.getBookList().size());
     }
 }

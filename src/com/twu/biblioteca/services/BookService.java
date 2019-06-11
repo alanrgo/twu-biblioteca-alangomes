@@ -38,4 +38,12 @@ public class BookService {
             i++;
         }
     }
+
+    public boolean checkBookOut(int menuBookIndex) {
+        if( menuBookIndex > 0 && menuBookIndex <= getBookList().size()) {
+            repository.removeBookFromList(menuBookIndex - 1);
+            return true;
+        }
+        return false;
+    }
 }

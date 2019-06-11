@@ -6,9 +6,6 @@ import com.twu.biblioteca.services.BookService;
 import com.twu.biblioteca.services.Content;
 import com.twu.biblioteca.services.MenuService;
 
-import java.util.List;
-import java.util.ListIterator;
-
 public class BibliotecaApp {
 
     private BookService bookService;
@@ -34,6 +31,13 @@ public class BibliotecaApp {
             option = this.menuService.getUserOption();
             if( option == MenuOption.LIST_BOOKS ) {
                 this.bookService.printBookList(this.bookService.getBookList());
+            }
+            if( option == MenuOption.CHECKOUT ) {
+                System.out.print(Content.CHECKOUT_SCOPE);
+                System.out.print(Content.CHECKOUT_INPUT_MESSAGE);
+                int bookIndex = this.menuService.getBookIndex();
+                this.bookService.checkBookOut(bookIndex);
+                System.out.print(Content.CHECKOUT_SUCCESS);
             }
         } while ( option != MenuOption.QUIT);
 

@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BookServiceTest {
 
@@ -89,5 +88,23 @@ public class BookServiceTest {
         List<Book> list = this.buildSecondBookList();
         service.printBookList(list);
         assertEquals(optionScopeTitle + secondBookListOutput, outContent.toString());
+    }
+
+    @Test
+    public void testIfRepositoryMethodIsCalledWhenCheckingOut() {
+        BookRepository repository = mock(BookRepository.class);
+        when(repository.getBookList()).thenReturn(this.buildBookList());
+        BookService service = new BookService(repository);
+        int harryPotterMenuIndex = 1;
+        service.checkBookOut(harryPotterMenuIndex);
+        verify(repository, times(1)).removeBookFromList(0);
+    }
+
+    @Test
+    public void testIfBookIndexIsValid() {
+        BookService service = new BookService();
+        int invalidBookIndex = 200;
+        boolean result = service.checkBookOut(invalidBookIndex);
+        assertEquals(result, false);
     }
 }

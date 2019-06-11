@@ -18,7 +18,7 @@ public class MenuServiceTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
-    private String stringfiedMenu = "\nHow can we help you?\n1 - List of books.\n2 - Quit Application.\n";
+    private String stringfiedMenu = Content.STRINGIFIED_MENU;
     private String errorMessage = "Please select a valid option!\n";
 
 
@@ -70,6 +70,20 @@ public class MenuServiceTest {
 
         MenuOption option = menuService.getUserOption();
         assertEquals(MenuOption.LIST_BOOKS, option);
+    }
+
+    @Test
+    public void testIfBookIndexIsReturned() {
+        String checkoutOption = "2\n";
+        String bookIndexInput = "1\n";
+        String quitOption = "3\n";
+        String userOverallInput = checkoutOption + bookIndexInput + quitOption;
+        Scanner scanner = new Scanner(userOverallInput);
+        MenuService menuService = new MenuService(scanner);
+
+        menuService.getUserOption();
+        int bookIndex = menuService.getBookIndex();
+        assertEquals(1, bookIndex);
     }
 
 
