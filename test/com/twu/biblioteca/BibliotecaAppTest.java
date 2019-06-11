@@ -27,7 +27,7 @@ public class BibliotecaAppTest {
     private String welcomeMessage = Content.WELCOME_MESSAGE;
     private String bookScopeTitle = Content.BOOK_SCOPE;
     private String quitMessage = Content.QUIT_MESSAGE;
-    private String menuStringfied = Content.STRINGIFIED_MENU;
+    private String menuStringified = Content.STRINGIFIED_MENU;
 
     private String strinfiedBookList = "1 - Harry Potter\tJK Rowling\t1997\n" +
             "2 - Alice in Wonderland\tLewis Carroll\t1865\n";
@@ -37,7 +37,10 @@ public class BibliotecaAppTest {
     private BookService bookService;
     private MenuService menuService;
 
-    private String functionalOutput = welcomeMessage + menuStringfied + quitMessage;
+    private String functionalOutput = welcomeMessage + menuStringified + quitMessage;
+    private String checkoutScope = Content.CHECKOUT_SCOPE;
+    private String checkoutOptionMessage = Content.CHECKOUT_INPUT_MESSAGE;
+    private String checkoutSuccessMessage = Content.CHECKOUT_SUCCESS;
 
     @Before
     public void setUpStreams() {
@@ -110,8 +113,8 @@ public class BibliotecaAppTest {
         app.run();
         assertEquals(
                 welcomeMessage
-                        + menuStringfied + bookScopeTitle + strinfiedBookList
-                        + menuStringfied + quitMessage
+                        + menuStringified + bookScopeTitle + strinfiedBookList
+                        + menuStringified + quitMessage
                 , outContent.toString());
     }
 
@@ -138,9 +141,60 @@ public class BibliotecaAppTest {
         app.run();
 
         assertEquals(welcomeMessage
-                + menuStringfied + bookScopeTitle + strinfiedBookList
-                + menuStringfied + bookScopeTitle + strinfiedBookList
-                + menuStringfied + quitMessage, outContent.toString());
+                + menuStringified + bookScopeTitle + strinfiedBookList
+                + menuStringified + bookScopeTitle + strinfiedBookList
+                + menuStringified + quitMessage, outContent.toString());
+    }
+
+    @Test
+    public void testIfCheckoutIsBeingOutputted() {
+        this.menuService = mock(MenuService.class);
+        doCallRealMethod().when(this.menuService).displayMenu();
+        when(this.menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.QUIT);
+        when(this.menuService.getBookIndex()).thenReturn(1);
+
+        BibliotecaApp app = new BibliotecaApp(new BookService(), this.menuService);
+        app.run();
+
+        assertEquals( welcomeMessage +
+                menuStringified + checkoutScope + checkoutOptionMessage + checkoutSuccessMessage +
+                menuStringified + quitMessage, outContent.toString());
+    }
+
+    @Test
+    public void testIfCheckoutServiceIsCalled() {
+        this.bookService = mock(BookService.class);
+
+        this.menuService = mock(MenuService.class);
+        doCallRealMethod().when(this.menuService).displayMenu();
+        when(this.menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.QUIT);
+        when(this.menuService.getBookIndex()).thenReturn(1);
+
+        BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
+        app.run();
+
+        verify(menuService, times(1)).getBookIndex();
+        verify(bookService, times(1)).checkBookOut(1);
+    }
+
+    @Test
+    public void testIfIntegrationWithBookServiceIsWorking() {
+        this.bookService = new BookService();
+        this.menuService = mock(MenuService.class);
+        doCallRealMethod().when(this.menuService).displayMenu();
+        when(this.menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.QUIT);
+        when(this.menuService.getBookIndex()).thenReturn(1);
+
+        BibliotecaApp app = new BibliotecaApp(this.bookService, this.menuService);
+        app.run();
+
+        assertEquals(this.bookService.getBookList().size(), 1);
     }
 
 }

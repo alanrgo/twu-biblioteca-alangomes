@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class MenuService {
 
     private Scanner inputObj;
-    private int numberOptions = 2;
+    private int numberOptions = 3;
 
     public MenuService() {
         this.inputObj = new Scanner(System.in);
@@ -18,9 +18,7 @@ public class MenuService {
     }
 
     public void displayMenu(){
-        System.out.print("\nHow can we help you?\n");
-        System.out.print("1 - List of books.\n");
-        System.out.print("2 - Quit Application.\n");
+        System.out.print(Content.STRINGIFIED_MENU);
     }
 
     private boolean isValid(int option) {
@@ -37,5 +35,9 @@ public class MenuService {
             option = inputObj.nextInt();
         } while ( !isValid(option));
         return MenuOption.values()[option];
+    }
+
+    public int getBookIndex() {
+        return inputObj.nextInt();
     }
 }

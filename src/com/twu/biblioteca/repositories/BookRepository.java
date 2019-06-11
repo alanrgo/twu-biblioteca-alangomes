@@ -8,10 +8,30 @@ import java.util.List;
 
 public class BookRepository {
 
+    private List<Book> list;
+
+    public BookRepository() {
+        list = new ArrayList<Book>();
+
+        list.add(Book.builder()
+                    .title("Harry Potter")
+                    .author("JK Rowling")
+                    .year(1997)
+                    .build());
+
+        list.add(Book.builder()
+                    .title("Alice in Wonderland")
+                    .author("Lewis Carroll")
+                    .year(1865)
+                    .build());
+    }
+
     public List<Book> getBookList() {
-        List<Book> list = new ArrayList<Book>();
-        list.add(new Book("Harry Potter", "JK Rowling", 1997));
-        list.add(new Book("Alice in Wonderland", "Lewis Carroll", 1865));
         return list;
+    }
+
+    public boolean removeBookFromList(int bookIndex) {
+        list.remove(bookIndex);
+        return true;
     }
 }
