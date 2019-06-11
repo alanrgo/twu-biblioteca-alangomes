@@ -1,5 +1,6 @@
 package com.twu.biblioteca.services;
 
+import com.twu.biblioteca.fixtures.BookFixtures;
 import com.twu.biblioteca.models.Book;
 import com.twu.biblioteca.repositories.BookRepository;
 import org.junit.After;
@@ -22,17 +23,18 @@ public class BookServiceTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
-    private String optionScopeTitle = "\nBooks in the library\n";
+    private String optionScopeTitle = Content.BOOK_SCOPE;
     private String bookListOutput = "1 - Harry Potter\tJK Rowling\t1997\n" +
             "2 - Alice in Wonderland\tLewis Carroll\t1865\n";
-    private String secondBookListOutput = "1 - Alice in Wonderland 2\tLewis Carroll\t1865\n" +
-            "2 - Harry Potter 2\tJK Rowling\t1997\n";
+    private String secondBookListOutput = "1 - Alice in Wonderland 2\tLewis Carroll\t1870\n" +
+            "2 - Harry Potter 2\tJK Rowling\t1999\n";
 
 
 
     private List<Book> buildBookList() {
-        Book harryPotterBook = new Book("Harry Potter", "JK Rowling", 1997);
-        Book aliceInWonderlandBook = new Book("Alice in Wonderland", "Lewis Carroll", 1865);
+        Book harryPotterBook = BookFixtures.HARRY_POTTER;
+        Book aliceInWonderlandBook = BookFixtures.ALICE_WONDERLAND;
+
         List<Book> list = new ArrayList<Book>();
         list.add(harryPotterBook);
         list.add(aliceInWonderlandBook);
@@ -40,8 +42,8 @@ public class BookServiceTest {
     }
 
     private List<Book> buildSecondBookList() {
-        Book harryPotterBook = new Book("Harry Potter 2", "JK Rowling", 1997);
-        Book aliceInWonderlandBook = new Book("Alice in Wonderland 2", "Lewis Carroll", 1865);
+        Book harryPotterBook = BookFixtures.HARRY_POTTER_2;
+        Book aliceInWonderlandBook = BookFixtures.ALICE_WONDERLAND_2;
         List<Book> list = new ArrayList<Book>();
         list.add(aliceInWonderlandBook);
         list.add(harryPotterBook);
@@ -69,7 +71,7 @@ public class BookServiceTest {
 
         BookService service = new BookService(repository);
 
-        assertEquals(service.getBookList().get(0).getBookTitle(), list.get(0).getBookTitle());
+        assertEquals(service.getBookList().get(0).getTitle(), list.get(0).getTitle());
 
     }
 

@@ -12,19 +12,19 @@ public class BookTest {
 
     @Test
     public void testIfGetterGetsRightTitle() {
-        Book book = new Book(title);
-        assertEquals(book.getBookTitle(), title);
+        Book book = Book.builder().title(title).build();
+        assertEquals(book.getTitle(), title);
     }
 
     @Test
     public void testIfGetterGetsYear() {
-        Book book = new Book(title, year);
-        assertEquals(book.getBookYear(), year);
+        Book book = Book.builder().title(title).year(year).build();
+        assertEquals(book.getYear(), year);
     }
 
     @Test
     public void testIfGetterGetsAuthor() {
         Book book = new Book(title, author, year);
-        assertEquals(book.getAuthorName(), author);
+        assertEquals(book.getAuthor(), author);
     }
 }

@@ -3,12 +3,12 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.models.Book;
 import com.twu.biblioteca.models.MenuOption;
 import com.twu.biblioteca.services.BookService;
+import com.twu.biblioteca.services.Content;
 import com.twu.biblioteca.services.MenuService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -24,12 +24,11 @@ public class BibliotecaAppTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
-    private String welcomeMessage = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
-    private String bookScopeTitle = "\nBooks in the library\n";
-    private String quitMessage = "Quitting the application. Hope to see you soon! ;D\n";
-    private String menuStringfied = "\nHow can we help you?\n" +
-            "1 - List of books.\n" +
-            "2 - Quit Application.\n";
+    private String welcomeMessage = Content.WELCOME_MESSAGE;
+    private String bookScopeTitle = Content.BOOK_SCOPE;
+    private String quitMessage = Content.QUIT_MESSAGE;
+    private String menuStringfied = Content.STRINGIFIED_MENU;
+
     private String strinfiedBookList = "1 - Harry Potter\tJK Rowling\t1997\n" +
             "2 - Alice in Wonderland\tLewis Carroll\t1865\n";
 
