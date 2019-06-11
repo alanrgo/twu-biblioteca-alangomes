@@ -31,9 +31,9 @@ public class BookService {
         System.out.print("\nBooks in the library\n");
         while(bookIterator.hasNext()) {
             aux = bookIterator.next();
-            System.out.print(i + " - " + aux.getBookTitle() + "\t" +
-                    aux.getAuthorName() + "\t" +
-                    aux.getBookYear() +
+            System.out.print(i + " - " + aux.getTitle() + "\t" +
+                    aux.getAuthor() + "\t" +
+                    aux.getYear() +
                     "\n");
             i++;
         }
