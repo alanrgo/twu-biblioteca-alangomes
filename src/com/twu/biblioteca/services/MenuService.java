@@ -40,4 +40,16 @@ public class MenuService {
     public int getBookIndex() {
         return inputObj.nextInt();
     }
+
+    public void displayCheckoutInterface() {
+        System.out.print(Content.CHECKOUT_SCOPE + Content.CHECKOUT_INPUT_MESSAGE);
+    }
+
+    public void displayCheckoutSuccessMessage() {
+        System.out.print(Content.CHECKOUT_SUCCESS);
+    }
+
+    public void displayCheckoutFailureMessage() {
+        System.out.print(Content.CHECKOUT_FAILURE);
+    }
 }

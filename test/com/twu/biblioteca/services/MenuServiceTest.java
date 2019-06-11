@@ -86,5 +86,27 @@ public class MenuServiceTest {
         assertEquals(1, bookIndex);
     }
 
+    @Test
+    public void testIfMenuDisplaysCheckoutInterface() {
+        MenuService service = new MenuService();
+        String expected = Content.CHECKOUT_SCOPE + Content.CHECKOUT_INPUT_MESSAGE;
+        service.displayCheckoutInterface();
+        assertEquals(expected, outContent.toString());
+    }
 
+    @Test
+    public void testIfMenuDisplaysCheckoutSuccessMessage() {
+        MenuService service = new MenuService();
+        String expected = Content.CHECKOUT_SUCCESS;
+        service.displayCheckoutSuccessMessage();
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    public void testIfMenuDisplaysCheckoutFailuresMessage() {
+        MenuService service = new MenuService();
+        String expected = Content.CHECKOUT_FAILURE;
+        service.displayCheckoutFailureMessage();
+        assertEquals(expected, outContent.toString());
+    }
 }
