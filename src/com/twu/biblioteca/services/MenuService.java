@@ -60,4 +60,8 @@ public class MenuService {
     public void displayReturnInputMessage() {
         System.out.print(Content.RETURN_INPUT_INTERFACE);
     }
+
+    public void displayReturnSuccessMessage() {
+        System.out.print(Content.RETURN_SUCCESS_MESSAGE);
+    }
 }

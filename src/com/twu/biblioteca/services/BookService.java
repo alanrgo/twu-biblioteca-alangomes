@@ -45,9 +45,10 @@ public class BookService {
         return false;
     }
 
-    public void returnBookToRegularList(int bookIndex) {
+    public boolean returnBookToRegularList(int bookIndex) {
         Book returnedBook = repository.removeBookFromCheckoutList(bookIndex - 1);
         repository.insertBookIntoList(returnedBook);
+        return true;
     }
 
     public List<Book> getCheckoutList() {

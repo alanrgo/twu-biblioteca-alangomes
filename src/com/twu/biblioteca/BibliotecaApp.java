@@ -43,8 +43,10 @@ public class BibliotecaApp {
                 menuService.displayReturnInterface();
                 bookService.printBookList(bookService.getCheckoutList());
                 menuService.displayReturnInputMessage();
-                menuService.getBookIndex();
-                bookService.returnBookToRegularList(1);
+                int bookIndex = menuService.getBookIndex();
+                if( bookService.returnBookToRegularList(bookIndex)) {
+                    menuService.displayReturnSuccessMessage();
+                }
             }
         } while ( option != MenuOption.QUIT);
 
