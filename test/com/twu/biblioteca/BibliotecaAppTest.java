@@ -47,6 +47,7 @@ public class BibliotecaAppTest {
     private String returnInputMessage = Content.RETURN_INPUT_INTERFACE;
     private String stringifiedCheckoutList = Content.BOOK_SCOPE + "1 - Alice in Wonderland\tLewis Carroll\t1865\n";
     private String returnSuccessMessage = Content.RETURN_SUCCESS_MESSAGE;
+    private String returnFailureMessage = Content.RETURN_FAILURE_MESSAGE;
 
     @Before
     public void setUpStreams() {
@@ -356,6 +357,35 @@ public class BibliotecaAppTest {
                         menuStringified + checkoutScope + checkoutOptionMessage + checkoutSuccessMessage +
                         menuStringified + returnScope + stringifiedCheckoutList + returnInputMessage + returnSuccessMessage +
                         menuStringified + quitMessage, outContent.toString());
+    }
+
+    @Test
+    public void testWholeScopeOutputForFailureCase() {
+        int bookIndex = 2;
+        int checkoutBookIndex = 2;
+        bookService = new BookService();
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        doCallRealMethod().when(menuService).displayCheckoutSuccessMessage();
+        doCallRealMethod().when(menuService).displayReturnInterface();
+        doCallRealMethod().when(menuService).displayReturnInputMessage();
+        doCallRealMethod().when(menuService).displayReturnSuccessMessage();
+        doCallRealMethod().when(menuService).displayReturnFailureMessage();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.RETURN)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex())
+                .thenReturn(bookIndex)
+                .thenReturn(checkoutBookIndex);
+
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
+        app.run();
+        assertEquals(welcomeMessage +
+                menuStringified + checkoutScope + checkoutOptionMessage + checkoutSuccessMessage +
+                menuStringified + returnScope + stringifiedCheckoutList + returnInputMessage + returnFailureMessage +
+                menuStringified + quitMessage, outContent.toString());
     }
 
 }

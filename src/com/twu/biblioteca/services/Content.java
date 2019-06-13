@@ -17,4 +17,5 @@ public class Content {
     public static final String RETURN_SCOPE = "\nWhich of these books do you want to return?\n";
     public static final String RETURN_INPUT_INTERFACE = "Please, type the number of the book you want to return:\n";
     public static final String RETURN_SUCCESS_MESSAGE = "Thank you for returning the book\n";
+    public static final String RETURN_FAILURE_MESSAGE = "That is not a valid book to return\n";
 }
