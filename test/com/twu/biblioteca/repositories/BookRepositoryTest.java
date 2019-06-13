@@ -46,4 +46,14 @@ public class BookRepositoryTest {
         repository.insertBookIntoCheckoutList(checkedOut);
         assertEquals(expectedCheckoutListSize, repository.getAllCheckoutBooks().size());
     }
+
+    @Test
+    public void testIfBookCanBeRemovedFromCheckoutList() {
+        BookRepository repository = new BookRepository();
+        int bookIndex = 0;
+        Book checkedOut = repository.removeBookFromList(bookIndex);
+        repository.insertBookIntoCheckoutList(checkedOut);
+        repository.removeBookFromCheckoutList(0);
+        assertEquals(0, repository.getAllCheckoutBooks().size());
+    }
 }

@@ -52,4 +52,12 @@ public class MenuService {
     public void displayCheckoutFailureMessage() {
         System.out.print(Content.CHECKOUT_FAILURE);
     }
+
+    public void displayReturnInterface() {
+        System.out.print(Content.RETURN_SCOPE);
+    }
+
+    public void displayReturnInputMessage() {
+        System.out.print(Content.RETURN_INPUT_INTERFACE);
+    }
 }

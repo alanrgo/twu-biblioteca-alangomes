@@ -44,4 +44,13 @@ public class BookRepository {
     public List<Book> getAllCheckoutBooks() {
         return checkoutList;
     }
+
+    public Book removeBookFromCheckoutList(int bookIndex) {
+        Book removed = checkoutList.remove(bookIndex);
+        return removed;
+    }
+
+    public void insertBookIntoList(Book bookToBeInserted) {
+        list.add(bookToBeInserted);
+    }
 }
