@@ -46,6 +46,8 @@ public class BibliotecaApp {
                 int bookIndex = menuService.getBookIndex();
                 if( bookService.returnBookToRegularList(bookIndex)) {
                     menuService.displayReturnSuccessMessage();
+                } else {
+                    menuService.displayReturnFailureMessage();
                 }
             }
         } while ( option != MenuOption.QUIT);

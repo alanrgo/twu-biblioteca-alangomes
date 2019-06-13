@@ -64,4 +64,8 @@ public class MenuService {
     public void displayReturnSuccessMessage() {
         System.out.print(Content.RETURN_SUCCESS_MESSAGE);
     }
+
+    public void displayReturnFailureMessage() {
+        System.out.print(Content.RETURN_FAILURE_MESSAGE);
+    }
 }
