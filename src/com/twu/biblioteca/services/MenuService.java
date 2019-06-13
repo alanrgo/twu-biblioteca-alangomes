@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class MenuService {
 
     private Scanner inputObj;
-    private int numberOptions = 3;
+    private int numberOptions = 4;
 
     public MenuService() {
         this.inputObj = new Scanner(System.in);
@@ -51,5 +51,13 @@ public class MenuService {
 
     public void displayCheckoutFailureMessage() {
         System.out.print(Content.CHECKOUT_FAILURE);
+    }
+
+    public void displayReturnInterface() {
+        System.out.print(Content.RETURN_SCOPE);
+    }
+
+    public void displayReturnInputMessage() {
+        System.out.print(Content.RETURN_INPUT_INTERFACE);
     }
 }

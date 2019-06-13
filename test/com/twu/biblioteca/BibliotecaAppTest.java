@@ -1,5 +1,6 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.fixtures.BookFixtures;
 import com.twu.biblioteca.models.Book;
 import com.twu.biblioteca.models.MenuOption;
 import com.twu.biblioteca.services.BookService;
@@ -42,6 +43,9 @@ public class BibliotecaAppTest {
     private String checkoutOptionMessage = Content.CHECKOUT_INPUT_MESSAGE;
     private String checkoutSuccessMessage = Content.CHECKOUT_SUCCESS;
     private String checkoutFailureMessage = Content.CHECKOUT_FAILURE;
+    private String returnScope = Content.RETURN_SCOPE;
+    private String returnInputMessage = Content.RETURN_INPUT_INTERFACE;
+    private String stringifiedCheckoutList = Content.BOOK_SCOPE + "1 - Alice in Wonderland\tLewis Carroll\t1865\n";
 
     @Before
     public void setUpStreams() {
@@ -206,6 +210,7 @@ public class BibliotecaAppTest {
         menuService = mock(MenuService.class);
         doCallRealMethod().when(menuService).displayMenu();
         doCallRealMethod().when(menuService).displayCheckoutInterface();
+        doCallRealMethod().when(menuService).displayCheckoutFailureMessage();
         when(menuService.getUserOption())
                 .thenReturn(MenuOption.CHECKOUT)
                 .thenReturn(MenuOption.QUIT);
@@ -217,6 +222,138 @@ public class BibliotecaAppTest {
         assertEquals( welcomeMessage +
                 menuStringified + checkoutScope + checkoutOptionMessage + checkoutFailureMessage +
                 menuStringified + quitMessage, outContent.toString());
+    }
+
+    @Test
+    public void testIfReturnBookMethodIsCalled() {
+        int bookIndex = 2;
+        int checkoutBookIndex = 1;
+        bookService = mock(BookService.class);
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.RETURN)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex())
+                .thenReturn(bookIndex)
+                .thenReturn(checkoutBookIndex);
+
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
+        app.run();
+        verify(bookService, times(1)).returnBookToRegularList(1);
+    }
+
+    @Test
+    public void testIfCheckoutListIsFilled() {
+        int bookIndex = 2;
+
+        bookService = new BookService();
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex())
+                .thenReturn(bookIndex);
+
+
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
+        app.run();
+        assertEquals(1, bookService.getCheckoutList().size());
+    }
+
+    @Test
+    public void testIfBookIsReturned() {
+        int bookIndex = 2;
+        int checkoutBookIndex = 1;
+        bookService = new BookService();
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.RETURN)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex())
+                .thenReturn(bookIndex)
+                .thenReturn(checkoutBookIndex);
+
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
+        app.run();
+        assertEquals(0, bookService.getCheckoutList().size());
+        assertEquals(2, bookService.getBookList().size());
+    }
+
+    @Test
+    public void testIfMenuServiceIsBeingCalledForReturnScope() {
+        int bookIndex = 2;
+        int checkoutBookIndex = 1;
+        bookService = new BookService();
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.RETURN)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex())
+                .thenReturn(bookIndex)
+                .thenReturn(checkoutBookIndex);
+
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
+        app.run();
+        verify(menuService, times(1)).displayReturnInterface();
+    }
+
+    @Test
+    public void testIfCheckoutListIsPrinted() {
+        int bookIndex = 2;
+        int checkoutBookIndex = 1;
+        bookService = mock(BookService.class);
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.RETURN)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex())
+                .thenReturn(bookIndex)
+                .thenReturn(checkoutBookIndex);
+
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
+        app.run();
+        verify(bookService, times(1)).printBookList(bookService.getCheckoutList());
+    }
+
+    @Test
+    public void testWholeScopeOutput() {
+        int bookIndex = 2;
+        int checkoutBookIndex = 1;
+        bookService = new BookService();
+        menuService = mock(MenuService.class);
+        doCallRealMethod().when(menuService).displayMenu();
+        doCallRealMethod().when(menuService).displayCheckoutInterface();
+        doCallRealMethod().when(menuService).displayCheckoutSuccessMessage();
+        doCallRealMethod().when(menuService).displayReturnInterface();
+        doCallRealMethod().when(menuService).displayReturnInputMessage();
+        when(menuService.getUserOption())
+                .thenReturn(MenuOption.CHECKOUT)
+                .thenReturn(MenuOption.RETURN)
+                .thenReturn(MenuOption.QUIT);
+        when(menuService.getBookIndex())
+                .thenReturn(bookIndex)
+                .thenReturn(checkoutBookIndex);
+
+        BibliotecaApp app = new BibliotecaApp(bookService, menuService);
+        app.run();
+        assertEquals(welcomeMessage +
+                        menuStringified + checkoutScope + checkoutOptionMessage + checkoutSuccessMessage +
+                        menuStringified + returnScope + stringifiedCheckoutList + returnInputMessage +
+                        menuStringified + quitMessage, outContent.toString());
     }
 
 }

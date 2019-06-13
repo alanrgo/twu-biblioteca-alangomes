@@ -4,5 +4,6 @@ public enum MenuOption {
     DUMMY_OPTION,
     LIST_BOOKS,
     CHECKOUT,
+    RETURN,
     QUIT
 }

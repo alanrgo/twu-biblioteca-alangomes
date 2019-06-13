@@ -9,9 +9,11 @@ import java.util.List;
 public class BookRepository {
 
     private List<Book> list;
+    private List<Book> checkoutList;
 
     public BookRepository() {
         list = new ArrayList<Book>();
+        checkoutList = new ArrayList<Book>();
 
         list.add(Book.builder()
                     .title("Harry Potter")
@@ -30,8 +32,25 @@ public class BookRepository {
         return list;
     }
 
-    public boolean removeBookFromList(int bookIndex) {
-        list.remove(bookIndex);
-        return true;
+    public Book removeBookFromList(int bookIndex) {
+        Book removed = list.remove(bookIndex);
+        return removed;
+    }
+
+    public void insertBookIntoCheckoutList(Book checkedOut) {
+        checkoutList.add(checkedOut);
+    }
+
+    public List<Book> getAllCheckoutBooks() {
+        return checkoutList;
+    }
+
+    public Book removeBookFromCheckoutList(int bookIndex) {
+        Book removed = checkoutList.remove(bookIndex);
+        return removed;
+    }
+
+    public void insertBookIntoList(Book bookToBeInserted) {
+        list.add(bookToBeInserted);
     }
 }

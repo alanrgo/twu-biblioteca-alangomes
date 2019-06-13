@@ -43,4 +43,9 @@ public class Book {
                 this.getYear().equals(book.getYear());
     }
 
+    @Override
+    public String toString() {
+        return getTitle() + "\t" + getAuthor() + "\t" + getYear();
+    }
+
 }

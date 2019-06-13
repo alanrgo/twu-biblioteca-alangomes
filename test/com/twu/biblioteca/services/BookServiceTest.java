@@ -94,10 +94,12 @@ public class BookServiceTest {
     public void testIfRepositoryMethodIsCalledWhenCheckingOut() {
         BookRepository repository = mock(BookRepository.class);
         when(repository.getBookList()).thenReturn(this.buildBookList());
+        when(repository.removeBookFromList(0)).thenReturn(BookFixtures.HARRY_POTTER);
         BookService service = new BookService(repository);
         int harryPotterMenuIndex = 1;
         service.checkBookOut(harryPotterMenuIndex);
         verify(repository, times(1)).removeBookFromList(0);
+        verify(repository, times(1)).insertBookIntoCheckoutList(BookFixtures.HARRY_POTTER);
     }
 
     @Test

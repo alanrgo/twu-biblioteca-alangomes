@@ -28,22 +28,29 @@ public class BookService {
         ListIterator<Book> bookIterator = list.listIterator();
         Book aux;
 
-        System.out.print("\nBooks in the library\n");
+        System.out.print(Content.BOOK_SCOPE);
         while(bookIterator.hasNext()) {
             aux = bookIterator.next();
-            System.out.print(i + " - " + aux.getTitle() + "\t" +
-                    aux.getAuthor() + "\t" +
-                    aux.getYear() +
-                    "\n");
+            System.out.print(i + " - " + aux.toString() + "\n");
             i++;
         }
     }
 
     public boolean checkBookOut(int menuBookIndex) {
         if( menuBookIndex > 0 && menuBookIndex <= getBookList().size()) {
-            repository.removeBookFromList(menuBookIndex - 1);
+            Book checkedOut = repository.removeBookFromList(menuBookIndex - 1);
+            repository.insertBookIntoCheckoutList(checkedOut);
             return true;
         }
         return false;
+    }
+
+    public void returnBookToRegularList(int bookIndex) {
+        Book returnedBook = repository.removeBookFromCheckoutList(bookIndex - 1);
+        repository.insertBookIntoList(returnedBook);
+    }
+
+    public List<Book> getCheckoutList() {
+        return repository.getAllCheckoutBooks();
     }
 }

@@ -1,6 +1,5 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.models.Book;
 import com.twu.biblioteca.models.MenuOption;
 import com.twu.biblioteca.services.BookService;
 import com.twu.biblioteca.services.Content;
@@ -38,7 +37,14 @@ public class BibliotecaApp {
                 if (bookService.checkBookOut(bookIndex) )
                     menuService.displayCheckoutSuccessMessage();
                 else
-                    System.out.print(Content.CHECKOUT_FAILURE);
+                    menuService.displayCheckoutFailureMessage();
+            }
+            if(option == MenuOption.RETURN ) {
+                menuService.displayReturnInterface();
+                bookService.printBookList(bookService.getCheckoutList());
+                menuService.displayReturnInputMessage();
+                menuService.getBookIndex();
+                bookService.returnBookToRegularList(1);
             }
         } while ( option != MenuOption.QUIT);
 
