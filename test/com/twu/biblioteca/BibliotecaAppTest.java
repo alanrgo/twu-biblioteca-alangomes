@@ -46,6 +46,7 @@ public class BibliotecaAppTest {
     private String returnScope = Content.RETURN_SCOPE;
     private String returnInputMessage = Content.RETURN_INPUT_INTERFACE;
     private String stringifiedCheckoutList = Content.BOOK_SCOPE + "1 - Alice in Wonderland\tLewis Carroll\t1865\n";
+    private String returnSuccessMessage = Content.RETURN_SUCCESS_MESSAGE;
 
     @Before
     public void setUpStreams() {
@@ -340,6 +341,7 @@ public class BibliotecaAppTest {
         doCallRealMethod().when(menuService).displayCheckoutSuccessMessage();
         doCallRealMethod().when(menuService).displayReturnInterface();
         doCallRealMethod().when(menuService).displayReturnInputMessage();
+        doCallRealMethod().when(menuService).displayReturnSuccessMessage();
         when(menuService.getUserOption())
                 .thenReturn(MenuOption.CHECKOUT)
                 .thenReturn(MenuOption.RETURN)
@@ -352,7 +354,7 @@ public class BibliotecaAppTest {
         app.run();
         assertEquals(welcomeMessage +
                         menuStringified + checkoutScope + checkoutOptionMessage + checkoutSuccessMessage +
-                        menuStringified + returnScope + stringifiedCheckoutList + returnInputMessage +
+                        menuStringified + returnScope + stringifiedCheckoutList + returnInputMessage + returnSuccessMessage +
                         menuStringified + quitMessage, outContent.toString());
     }
 
